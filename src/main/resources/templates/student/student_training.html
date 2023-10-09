@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="content-type" charset="utf-8"   content="text/html">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>[[${pageTitle}]]</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" charset="utf-8"></script>
+  <script src="https://kit.fontawesome.com/939512e01d.js" crossorigin="anonymous"></script>
+  <!-- Montserrat Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/index.css}"/>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+
+  <link rel="stylesheet" type="text/css"  th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .form-container{
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); /* Ajustați valorile pentru umbra dorită */
+            background-color: white;
+    }
+    .form-container-one{
+    background-color: #f5f5dc;
+    }
+  </style>
+
+</head>
+<body>
+<!-- Header -->
+<div class="grid-container">
+
+  <header class="header">
+    <div class="menu-icon" onclick="openSidebar()">
+      <span class="material-icons-outlined">menu</span>
+    </div>
+    <div class="header-left">
+      <span class="material-icons-outlined">search</span>
+    </div>
+    <div class="header-right">
+      <span class="material-icons-outlined">notifications</span>
+      <span class="material-icons-outlined">email</span>
+      <span class="material-icons-outlined">account_circle</span>
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="side-bar">
+      <div class="sidebar-title">
+        <div class="sidebar-brand">
+          <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" style="width:42px;height:42px;" alt=”logo”>
+          <p> Driving school management system</p>
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+      <div class="menu">
+        <div class="item">
+          <a th:href="@{/api/drivingschool/home}"> <span class="material-icons-outlined">dashboard</span>Dashboard</a>
+          <div class="item">
+            <a class="sub-btn"><span class="material-icons-outlined">school</span>Students<i class="fas fa-angle-right dropdown"></i></a>
+            <div class="sub-menu">
+              <a th:href="@{/api/drivingschool/student/studentForm}" class="sub-item">Add Students</a>
+              <a th:href="@{/api/drivingschool/student/fees}" class="sub-item">Student Fee</a>
+              <a href="#" class="sub-item">Delete Students</a>
+              <a th:href="@{/api/drivingschool/student/students}" class="sub-item">Students Details</a>
+            </div>
+          </div>
+          <div class="item">
+            <a href="#"> <span class="material-icons-outlined">event_note</span>Schedule</a>
+          </div>
+          <div class="item">
+            <a href="#"> <span class="material-icons-outlined">payments</span></i>Payment</a>
+          </div>
+          <div class="item">
+            <a th:href="@{/users}"> <span class="material-icons-outlined">payments</span></i>Users</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-container">
+    <div class="text-center main-title">
+      <h2>Create Student Training Package with id: [[${student.id}]]</h2>
+    </div>
+
+    <div class="form-container">
+      <form th:action="@{/student/save}" method="post"
+            id="studentForm"
+            th:object="${student}"
+
+            style="max-width: 600px; margin: 0 auto">
+        <input type="hidden" th:if="${student.id}" th:field="*{id}" />
+
+        <div class="panel-content mt-2">
+          <div class="table-responsive">
+            <table class="table table-user-information">
+              <tbody>
+              <tr>
+                <td>
+                  <strong>
+                    <span class="glyphicon glyphicon-road text-primary"></span>
+                    Type car
+                  </strong>
+                </td>
+                <td class="text-primary">
+                  <select  name="department" class="form-control selectpicker">
+                    <option value="">Select Type of car</option>
+                    <option>Manual </option>
+                    <option>Automatic</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>
+                    <span class="glyphicon glyphicon-euro  text-primary"></span>
+                    Cost
+                  </strong>
+                </td>
+                <td class="text-primary">
+                  <input name="cost" placeholder="Cost" class="form-control"  type="number">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>
+                    <span class="glyphicon glyphicon-user text-primary"></span>
+                    Instructor name
+                  </strong>
+                </td>
+                <td class="text-primary">
+                  <input name="cost" placeholder="Instructor name" class="form-control"  type="text">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>
+                    <span class="glyphicon glyphicon-time text-primary"></span>
+                    Training duration
+                  </strong>
+                </td>
+                <td class="text-primary">
+                  <input name="trainingDuration" placeholder="Training Duration" class="form-control"  type="text">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>
+                    <span class="glyphicon glyphicon-stats text-primary"></span>
+                    Status
+                  </strong>
+                </td>
+                <td class="text-primary">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="incompleteStatus" value="incomplete" checked>
+                    <label class="form-check-label" for="incompleteStatus">
+                      Incomplete
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="completeStatus" value="complete">
+                    <label class="form-check-label" for="completeStatus">
+                      Completed
+                    </label>
+                  </div>
+                </td>
+
+              </tbody>
+            </table>
+            <div class="text-center">
+              <button type="submit" class="btn btn-warning" >&nbsp&nbspSUBMIT <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp</button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal fade text-center" id="modalDialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalTitle">Warning</h4>
+            <button type="button" class="close" data-bs-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <span id="modalBody"></span>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="text-center">
+      <p>Driving Management System - Copyright &copy;  SmartDrive</p>
+    </div>
+
+  </main>
+
+
+</div>
+
+<!-- Scripts -->
+<!-- ApexCharts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+<!-- Custom JS -->
+<script src="../../../../../../../Desktop/proiecte/drivingschoolmanagementsystem/drivingschoolmanagementsystem/src/main/resources/static/js/scripts.js" th:src="@{/js/scripts.js}"></script>
+<script type="module">
+  import {StudentFormChecker} from "[[@{/js/studentForm.js}]]";
+  window.addEventListener('DOMContentLoaded',()=>new StudentFormChecker({
+      form:document.getElementById('studentForm'),
+      showModalDialog:(title, message)=>{
+	    $("#modalTitle").text(title);
+	    $("#modalBody").text(message);
+	    $("#modalDialog").modal("show");
+      },
+      csrfValue:$("input[name='_csrf']").val(),
+      emailValidURL:"[[@{/users/check_email}]]"
+    }));
+
+    window.showImageThumbnail=(fileInput)=>{
+        var file = fileInput.files[0]; //first file object
+        var reader = new FileReader();
+        reader.onload = function(event){
+            $("#thumbnail").attr("src", event.target.result)
+        };
+        reader.readAsDataURL(file);
+     }
+</script>
+
+
+</body>
+</html>s

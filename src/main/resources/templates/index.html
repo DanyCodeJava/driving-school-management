@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/939512e01d.js" crossorigin="anonymous"></script>
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/index.css}" href="../../../../../../../Desktop/proiecte/drivingschoolmanagementsystem/drivingschoolmanagementsystem/src/main/resources/static/css/index.css"/>
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined">search</span>
+        </div>
+        <div class="header-right">
+          <span class="material-icons-outlined">notifications</span>
+          <span class="material-icons-outlined">email</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+      <div class="side-bar">
+        <div class="sidebar-title">
+            <div class="sidebar-brand">
+              <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" style="width:42px;height:42px;" alt=”logo”>
+              <p> Driving school management system</p>
+            </div>
+            <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+          </div>
+		<div class="menu">
+			<div class="item">
+				<a th:href="@{/api/drivingschool/home}"> <span class="material-icons-outlined">dashboard</span>Dashboard</a>
+				<div class="item">
+
+					<a class="sub-btn"><span class="material-icons-outlined">person</span>Instructor <i
+						class="fas fa-angle-right dropdown"></i></a>
+					<div class="sub-menu">
+						<a th:href="@{/api/drivingschool/instructorForm}" class="sub-item">Add Instructor</a>
+						<a th:href="@{/api/drivingschool/instructors}"class="sub-item"> Update Instructor</a>
+						<a th:href="@{/api/drivingschool/instructors}" class="sub-item">Delete Instructor</a>
+						<a th:href="@{/api/drivingschool/instructors}" class="sub-item">Instructor Details</a>
+					</div>
+				</div>
+				<div class="item">
+						<a class="sub-btn"><span class="material-icons-outlined">school</span>Students<i class="fas fa-angle-right dropdown"></i></a>
+						<div class="sub-menu">
+                            <a th:href="@{/api/drivingschool/student/studentForm}" class="sub-item">Add Students</a>
+                            <a th:href="@{/api/drivingschool/student/fees}" class="sub-item">Student Fee</a>
+                            <a href="#" class="sub-item">Delete Students</a>
+                            <a th:href="@{/api/drivingschool/student/students}" class="sub-item">Students Details</a>
+						</div>
+					</div>
+					<div class="item">
+						<a href="#"> <span class="material-icons-outlined">event_note</span>Schedule</a>
+					</div>
+					<div class="item">
+						<a href="#"> <span class="material-icons-outlined">payments</span></i>Payment</a>
+					</div>
+                 <div class="item">
+                    <a href="#"> <span class="material-icons-outlined">payments</span></i>Payment</a>
+                </div>
+         
+				</div>
+			</div>
+		</div>
+  </aside>
+      <!-- Main -->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold">DASHBOARD</p>
+        </div>
+
+        <div class="main-cards">
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">INSTRUCTORS</p>
+              <span class="material-icons-outlined text-blue">person</span>
+            </div>
+            <span class="text-primary font-weight-bold" th:text="${numberOfInstructors}"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">STUDENTS</p>
+              <span class="material-icons-outlined text-orange">school</span>
+            </div>
+            <span class="text-primary font-weight-bold" th:text="${numberOfStudents}"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">INCOME</p>
+              <span class="material-icons-outlined text-green">paid</span>
+            </div>
+            <span class="text-primary font-weight-bold">79</span>
+          </div>
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <p class="chart-title">Total students enrolled per month </p>
+            <div id="bar-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">Purchase and Sales Orders</p>
+            <div id="area-chart"></div>
+          </div>
+
+        </div>
+      </main>
+      <!-- End Main -->
+
+    </div>
+
+    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../../../../../../../Desktop/proiecte/drivingschoolmanagementsystem/drivingschoolmanagementsystem/src/main/resources/static/js/scripts.js" th:src="@{/js/scripts.js}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        //jquery for toggle sub menus
+  
+        $('.sub-btn').click(function() {
+          $(this).next('.sub-menu').slideToggle();
+          $(this).find('.dropdown').toggleClass('rotate');
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+server.port: 8092
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/driving_school_management
+    username: root
+    password: admin
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
+    hibernate.ddl-auto: update
+
+dsm:
+  presentation:
+    users:
+      page-size: 4
+  user-photos-dir: user-photos
+  default-photo-path: ${dsm.user-photos-dir}/default-user.png
+  magic-number-png: [-119, 80, 78, 71]
+  magic-number-jpg: [-1, -40, -1, -32]

@@ -1,0 +1,8 @@
+* text eol=lf
+*.jpg binary
+*.jar binary
+*.ico binary
+*.ttf binary
+*.woff2 binary
+*.png binary
+

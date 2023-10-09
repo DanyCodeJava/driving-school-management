@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" charset="utf-8"></script>
+  <script src="https://kit.fontawesome.com/939512e01d.js" crossorigin="anonymous"></script>
+  <!-- Montserrat Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/index.css}"/>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    	 .inf-content{
+    border:1px solid #DDDDDD;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    border-radius:10px;
+    box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+    width: 555px;
+    display: inline-block;
+     }
+      .my-form-container {
+      max-width: 550px;
+  }
+  .my-form-container input[type="text"] {
+  width: 200px;
+}
+.my-form-container input[type="select"]{
+  width: 200px;
+
+}
+.panel-content {
+    display: none; /* Panoul este ascuns inițial */
+}
+.margin-button{
+  margin-bottom: 10px;
+}
+  </style>
+</head>
+<body>
+<div class="grid-container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="menu-icon" onclick="openSidebar()">
+      <span class="material-icons-outlined">menu</span>
+    </div>
+    <div class="header-left">
+      <span class="material-icons-outlined">search</span>
+    </div>
+    <div class="header-right">
+      <span class="material-icons-outlined">notifications</span>
+      <span class="material-icons-outlined">email</span>
+      <span class="material-icons-outlined">account_circle</span>
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="side-bar">
+      <div class="sidebar-title">
+        <div class="sidebar-brand">
+          <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" style="width:42px;height:42px;" alt=”logo”>
+          <p> Driving school management system</p>
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+      <div class="menu">
+        <div class="item">
+          <a th:href="@{/api/drivingschool/home}"> <span class="material-icons-outlined">dashboard</span>Dashboard</a>
+          <div class="item">
+
+            <a class="sub-btn"><span class="material-icons-outlined">person</span>Instructor <i
+                    class="fas fa-angle-right dropdown"></i></a>
+            <div class="sub-menu">
+              <a th:href="@{/api/drivingschool/instructorForm}" class="sub-item">Add Instructor</a>
+              <a th:href="@{/api/drivingschool/instructors}" class="sub-item"> Update Instructor</a>
+              <a th:href="@{/api/drivingschool/instructors}" class="sub-item">Delete Instructor</a>
+              <a th:href="@{/api/drivingschool/instructors}" class="sub-item">Instructor Details</a>
+            </div>
+          </div>
+          <div class="item">
+            <a class="sub-btn"><span class="material-icons-outlined">school</span>Students<i class="fas fa-angle-right dropdown"></i></a>
+            <div class="sub-menu">
+              <a th:href="@{/api/drivingschool/student/studentForm}" class="sub-item">Add Students</a>
+              <a th:href="@{/api/drivingschool/student/fees}" class="sub-item">Student Fee</a>
+              <a href="#" class="sub-item">Delete Students</a>
+              <a th:href="@{/api/drivingschool/student/students}" class="sub-item">Students Details</a>
+            </div>
+          </div>
+          <div class="item">
+            <a href="#"> <span class="material-icons-outlined">event_note</span>Schedule</a>
+          </div>
+          <div class="item">
+            <a href="#"> <span class="material-icons-outlined">payments</span>Payment</a>
+          </div>
+          <div class="item">
+            <a href="#"> <span class="material-icons-outlined">payments</span>Payment</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- Main -->
+  <main class="main-container">
+    <div class="main-title">
+      <p class="font-weight-bold">DASHBOARD STUDENT</p>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <p class="text-primary">STUDENT</p>
+          <span class="material-icons-outlined text-blue">person</span>
+        </div>
+        <span class="text-primary font-weight-bold" th:text="${numberOfInstructors}"></span>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="charts-card">
+        <p class="chart-title main-title">ENROLL DETAILS</p>
+          <div  class="panel-body inf-content">
+            <div class="row">
+              <div class="col-md-4">
+                <img alt="" style="width:100px;" title="" class="img-circle img-thumbnail isTooltip" th:src="@{'/users/' + ${student.id} + '/photo'}"  data-original-title="Usuario">
+              </div>
+              <div class="col-md-8">
+                <strong class="text-center">Information</strong><br>
+                <div class="table-responsive">
+                  <table class="table table-user-information">
+                    <tbody>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-asterisk text-primary"></span>
+                          Identification
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.id}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-user  text-primary"></span>
+                          First Name
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.firstName}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-cloud text-primary"></span>
+                          Last Name
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.lastName}"></span>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-envelope text-primary"></span>
+                          Email
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.email}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-home text-primary"></span>
+                          Address
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.address.line1}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-calendar text-primary"></span>
+                          Enroll Date
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.enrollDate}"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>
+                          <span class="glyphicon glyphicon-calendar text-primary"></span>
+                          Birth date
+                        </strong>
+                      </td>
+                      <td class="text-primary">
+                        <span class="text-center" th:text="${student.birthDate}"></span>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="charts-card">
+        <p class="chart-title main-title">TRAINING PACKAGE</p>
+        <div th:if="${student.lastTrainingPackage != null}" class="panel-body inf-content">
+          <div class="row">
+            <div class="col-md-12">
+              <strong class="text-center">Information</strong><br>
+              <div class="table-responsive">
+                <table class="table table-user-information">
+                  <tbody>
+                  <tr>
+                    <td>
+                      <strong>
+                        <span class="glyphicon glyphicon-road text-primary"></span>
+                       Car Type
+                      </strong>
+                    </td>
+                    <td class="text-primary">
+                      <span class="text-center" th:text="${student.lastTrainingPackage.carType}"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>
+                        <span class="glyphicon glyphicon-euro  text-primary"></span>
+                        Cost
+                      </strong>
+                    </td>
+                    <td class="text-primary">
+                      <span class="text-center" th:text="${student.lastTrainingPackage.cost}"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>
+                        <span class="glyphicon glyphicon-user text-primary"></span>
+                        Instructor name
+                      </strong>
+                    </td>
+                    <td class="text-primary">
+                      <span class="text-center" th:text="${student.lastTrainingPackage.instructorName}"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>
+                        <span class="glyphicon glyphicon-time text-primary"></span>
+                        Training duration
+                      </strong>
+                    </td>
+                    <td class="text-primary">
+                      <span class="text-center" th:text="${student.lastTrainingPackage.duration}"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>
+                        <span class="glyphicon glyphicon-stats text-primary"></span>
+                        Status
+                      </strong>
+                    </td>
+                    <td class="text-primary">
+                      <span class="text-center" th:text="${student.lastTrainingPackage.status}"></span>
+                    </td>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+          <a  th:href="@{'/student/trainingPackage/'+ ${student.id}}"  class="btn btn-primary text-center margin-button">Create Student Package</a>
+          </div>
+        </div>
+        <div th:if="${student.lastTrainingPackage == null}">
+          <student-training-package-creation-form th:attr="student = ${student.id} , csrfValue=${_csrf.token}, csrfHeader=${_csrf.headerName}">
+
+          </student-training-package-creation-form>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="charts">
+      <div class="charts-card">
+        <p class="chart-title  main-title">PAYMENT HISTORY</p>
+        <table  class="table table-bordered table-hover ">
+          <thead class="text-center">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">DateTime</th>
+            <th scope="col">Remarks</th>
+            <th scope="col">Paid Amount</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td>2000</td>
+            <td>0000</td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="text-center mt-2">
+        <button type="button" class="btn btn-outline-primary">
+          <i class="fa-solid fa-plus"></i> Payment
+        </button>
+        </div>
+      </div>
+      <div class="charts-card">
+        <p class="chart-title main-title">SCHEDULES</p>
+
+            <div class="container my-form-container">
+
+              <form class="well form-horizontal" action=" " method="post"  id="contact_form">
+                <fieldset>
+
+
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">Date and time</label>
+                    <div class="col-md-4 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        <input type="datetime-local" id="dateAndTime" name="dateAndTime" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Text input-->
+
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">Instructor Name</label>
+                    <div class="col-md-4 inputGroupContainer ">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input name="last_name" placeholder="Instructor Name" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">Type of programming</label>
+                    <div class="col-md-4 selectContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                        <select  name="department" class="form-control selectpicker">
+                          <option value="">Select Type of programming</option>
+                          <option>Course hour</option>
+                          <option>Driving hour</option>
+                          <option >Exam </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">E-Mail</label>
+                    <div class="col-md-4 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        <input name="email" placeholder="E-Mail Address" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Button -->
+                  <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4"><br>
+                      &nbsp&nbsp
+                      <button type="submit" class="btn btn-warning" >&nbsp&nbspSUBMIT <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+      </div>
+    </div>
+  </main>
+  <!-- End Main -->
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/js/dropDownMenu.js}"></script>
+<script type="module" th:if="${student.lastTrainingPackage==null}">
+ import {StudentTrainingPackageCreationForm} from "[[@{/js/student-training-package-creation-form.js}]]";
+ window.customElements.define('student-training-package-creation-form', StudentTrainingPackageCreationForm);
+</script>
+</body>
+</html>

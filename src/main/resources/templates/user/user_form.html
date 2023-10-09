@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" charset="utf-8"   content="text/html">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>[[${pageTitle}]]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/939512e01d.js" crossorigin="anonymous"></script>
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+
+</head>
+<body>
+<div class="grid-container">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+            <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+            <span class="material-icons-outlined">search</span>
+        </div>
+        <div class="header-right">
+            <span class="material-icons-outlined">notifications</span>
+            <span class="material-icons-outlined">email</span>
+            <span class="material-icons-outlined">account_circle</span>
+        </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div class="side-bar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <img src="../static/img/logo.jpg" th:src="@{/img/logo.jpg}" style="width:42px;height:42px;" alt=”logo”>
+                    <p> Driving school management system</p>
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+            <div class="menu">
+                <div class="item">
+                    <a th:href="@{/api/drivingschool/home}"> <span class="material-icons-outlined">dashboard</span>Dashboard</a>
+                    <div class="item">
+
+                        <a class="sub-btn"><span class="material-icons-outlined">person</span>Instructor <i
+                                class="fas fa-angle-right dropdown"></i></a>
+                        <div class="sub-menu">
+                            <a th:href="@{/api/drivingschool/instructorForm}" class="sub-item">Add Instructor</a>
+                            <a th:href="@{/api/drivingschool/instructors}"class="sub-item"> Update Instructor</a>
+                            <a th:href="@{/api/drivingschool/instructors}" class="sub-item">Delete Instructor</a>
+                            <a th:href="@{/api/drivingschool/instructors}" class="sub-item">Instructor Details</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a class="sub-btn"><span class="material-icons-outlined">school</span>Students<i class="fas fa-angle-right dropdown"></i></a>
+                        <div class="sub-menu">
+                            <a th:href="@{/api/drivingschool/student/studentForm}" class="sub-item">Add Students</a>
+                            <a th:href="@{/api/drivingschool/student/fees}" class="sub-item">Student Fee</a>
+                            <a href="#" class="sub-item">Delete Students</a>
+                            <a th:href="@{/api/drivingschool/student/students}" class="sub-item">Students Details</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a href="#"> <span class="material-icons-outlined">event_note</span>Schedule</a>
+                    </div>
+                    <div class="item">
+                        <a href="#"> <span class="material-icons-outlined">payments</span></i>Payment</a>
+                    </div>
+                    <div class="item">
+                        <a th:href="@{/users}"> <span class="material-icons-outlined">payments</span></i>Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <!-- Main -->
+    <main class="main-container">
+        <div class="main-title">
+            <p class="font-weight-bold"> [[${pageTitle}]] </p>
+        </div>
+        <form th:action="@{/users/save}" method="post"
+              th:object="${user}"
+              enctype="multipart/form-data"
+              onsubmit="return checkEmailUnique(event)"
+              id="userForm" style="max-width:700px; margin: 0 auto">
+            <input type="hidden" th:if="${user.id}" th:field="*{id}" />
+            <div class="border border-secondary rounded p-3">
+                <div class="form-group row">
+                 <label class="col-sm-4 col-form-label">E-mail</label>
+                        <div class = "col-sm-8">
+                            <input type="email" class="form-control" th:field="*{email}" required minlength="8" maxlength="128" />
+                        </div>
+                 </div>
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">First Name</label>
+                    <div class = "col-sm-8">
+                        <input type="text" class="form-control" th:field="*{firstName}" required minlength="2" maxlength="45" />
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">Last Name</label>
+                    <div class = "col-sm-8">
+                        <input type="text" class="form-control" th:field="*{lastName}" required minlength="2" maxlength="45" />
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">Password</label>
+                    <div class = "col-sm-8">
+                        <input type="password" class="form-control" th:field="*{password}"  minlength="8" maxlength="20" />
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">Roles</label>
+                    <div class = "col-sm-8">
+                        <th:block th:each="role : ${roles}">
+                            <input class="form-check-input m-2" type="checkbox" th:field="*{roles}" th:text="${role.name}" th:value="${role.name}"/>
+                            <br/>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">Enabled</label>
+                    <div class = "col-sm-8">
+                        <input  class="form-check-input m-2" type="checkbox"  th:field="*{enabled}"/>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-2">
+                    <label class="col-sm-4 col-form-label">Photos</label>
+                    <div class = "col-sm-8">
+                        <input onchange="showImageThumbnail(this)" type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="mb-2"/>
+                            <img th:src="@{'/users/' + ${user.id==null?'default':user.id} + '/photo'}" id="thumbnail" alt="Photos preview" class="image-fluid"/>
+                    </div>
+                </div>
+
+                <div class="text-center mt-2">
+                    <input type="submit" value="Save" class="btn btn-primary">
+                    <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel">
+                </div>
+            </div>
+
+        </form>
+
+        <div class="modal fade text-center" id="modalDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalTitle">Warning</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <span id="modalBody"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p>Driving Management System - Copyright &copy;  SmartDrive</p>
+        </div>
+    </main>
+
+
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/js/dropDownMenu.js}"></script>
+<script type="module">
+    import {UserEmailChecker} from "[[@{/js/checkEmail.js}]]";
+    $(document).ready(function(){
+    $("#buttonCancel").on("click", function(){
+        window.location = "[[@{/users}]]"});
+    });
+
+    window.showImageThumbnail=(fileInput)=>{
+        var file = fileInput.files[0]; //first file object
+        var reader = new FileReader();
+        reader.onload = function(event){
+            $("#thumbnail").attr("src", event.target.result)
+        };
+        reader.readAsDataURL(file);
+     }
+
+    function showModalDialog(title, message) {
+	$("#modalTitle").text(title);
+	$("#modalBody").text(message);
+	$("#modalDialog").modal("show");
+    }
+
+    const userEmailChecker = new UserEmailChecker({
+    onEmailOk:()=>document.getElementById("userForm").submit(),
+    showModalDialog:showModalDialog,
+    csrfValue:$("input[name='_csrf']").val(),
+    url:"[[@{/users/check_email}]]"
+    });
+    window.checkEmailUnique=(event)=>{
+        event.preventDefault();
+       const userEmail = $("#email").val();
+       const userId = $("#id").val();
+        return userEmailChecker.execute({userId, userEmail});
+
+    }
+
+</script>
+</body>
+</html>
