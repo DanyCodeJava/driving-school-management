@@ -3,11 +3,12 @@ package danycode.dsm.service;
 import danycode.dsm.dto.*;
 import danycode.dsm.entity.SimplePhotoFile;
 import danycode.dsm.entity.Student;
-import danycode.dsm.entity.User;
-import danycode.dsm.entity.UserType;
+import danycode.dsm.entity.StudentTrainingPackage;
+import danycode.dsm.entity.StudentTrainingPackageStatus;
 import danycode.dsm.mapper.PageMapper;
 import danycode.dsm.mapper.StudentMapper;
 import danycode.dsm.repository.StudentRepository;
+import danycode.dsm.repository.TrainingPackageRepository;
 import danycode.dsm.repository.UserPhotoRepository;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 @Service
@@ -30,17 +32,11 @@ public class StudentServiceImpl implements StudentService {
     private final ServiceEventPublisher serviceEventPublisher;
     private final UserPhotoFileProcessor userPhotoFileProcessor;
     private final UserPhotoRepository userPhotoRepository;
+    private final TrainingPackageRepository trainingPackageRepository;
 
 
-//    @Override
-//    @Transactional
-//    public void saveStudent(StudentDto studentDto) {
-//        var student = new Student();
-//        student.setEnrollDate(timeProvider.localDate());
-//        studentMapper.mapToStudentJpa(studentDto,student);
-//        var savedStudent = studentRepository.save(student);
-//        serviceEventPublisher.publishStudentCreated(savedStudent.getId());
-//    }
+
+
 
     @Override
     public StudentDto getStudentDetails(Long id) throws StudentNotFoundException {
@@ -84,5 +80,30 @@ public class StudentServiceImpl implements StudentService {
                 .map(SimplePhotoFile::new)
                 .ifPresent(photoFile -> userPhotoRepository.save(photoFile, id));
         return studentDto;}
+
+    @Override
+    @Transactional
+    public void createStudentTrainingPackage(Long studentId, StudentTrainingPackageCreationDto creationDto) {
+        var student = studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
+        var trainingPackage = trainingPackageRepository.findById(creationDto.getTrainingPackageId())
+                .orElseThrow(TrainingPackageNotFoundException::new);
+        var studentTrainingPackage = new StudentTrainingPackage();
+        studentTrainingPackage.setTrainingPackage(trainingPackage);
+        studentTrainingPackage.setInstructorName(creationDto.getInstructorName());
+        studentTrainingPackage.setStatus(StudentTrainingPackageStatus.INCOMPLETE);
+        student.addStudentTrainingPackage(studentTrainingPackage);
+
+    }
+
+    @Override
+    @Transactional
+    public void updateStudentTrainingPackage(Long studentId, StudentTrainingPackageDto studentTrainingPackageDto) {
+        var student =  studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
+        student.getStudentTrainingPackages().stream()
+                .max(Comparator.comparing(StudentTrainingPackage::getId))
+                .ifPresent(studentTrainingPackage -> studentTrainingPackage.setStatus(
+                        studentMapper.mapToStudentTrainingPackageStatus(studentTrainingPackageDto.getStatus())));
+    }
+
 
 }

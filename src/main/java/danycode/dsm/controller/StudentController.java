@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -27,8 +28,10 @@ public class StudentController {
     public String studentDetails(@PathVariable(name = "id") Long id, Model model) throws StudentNotFoundException {
         StudentDto studentDto = studentService.getStudentDetails(id);
         model.addAttribute("student", studentDto);
-       return "student/student_details";
+
+        return "student/student_details";
     }
+
 
     @GetMapping(value = "/student/new")
     public String createNewUser(Model model) {
@@ -36,13 +39,14 @@ public class StudentController {
         model.addAttribute("student", studentDto);
         return "student/student_form.html";
     }
+
     @PostMapping("/student/save")
     public String studentSave(@ModelAttribute("student") StudentDto studentDto,
-                           RedirectAttributes redirectAttributes,
-                           @RequestParam("image") MultipartFile multipartFile) throws IOException {
+                              RedirectAttributes redirectAttributes,
+                              @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         if (!multipartFile.isEmpty()) {
-            StudentDto savedStudent = studentService.saveStudent(studentDto, new PhotoFileDto(multipartFile.getInputStream()));
+            studentService.saveStudent(studentDto, new PhotoFileDto(multipartFile.getInputStream()));
         } else {
 
             studentService.saveStudent(studentDto, null);
@@ -50,6 +54,7 @@ public class StudentController {
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully!");
         return "redirect:/students";
     }
+
     @GetMapping("/students")
     public String listAllUsers(Model model) {
         return listByPage(1, model, UserSortField.firstName, SortDirection.asc, null);
@@ -82,10 +87,13 @@ public class StudentController {
         model.addAttribute("keyword", keyword);
         return "student/students";
     }
+
     @GetMapping("/student/trainingPackage/{id}")
-    public String getStudentTrainingPackage(@PathVariable(name = "id") Long id, Model model){
+    public String getStudentTrainingPackage(@PathVariable(name = "id") Long id, Model model) {
         StudentDto studentDto = studentService.getStudentDetails(id);
         model.addAttribute("student", studentDto);
         return "student/student_training";
     }
+
+
 }

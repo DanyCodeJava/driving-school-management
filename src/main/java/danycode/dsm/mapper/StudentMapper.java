@@ -1,11 +1,7 @@
 package danycode.dsm.mapper;
 
-import danycode.dsm.dto.AddressDto;
-import danycode.dsm.dto.StudentDto;
-import danycode.dsm.dto.StudentTrainingPackageDto;
-import danycode.dsm.entity.Address;
-import danycode.dsm.entity.Student;
-import danycode.dsm.entity.StudentTrainingPackage;
+import danycode.dsm.dto.*;
+import danycode.dsm.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -38,4 +34,8 @@ public interface StudentMapper {
     @Mapping(target = "carType", source = "trainingPackage.carType")
     StudentTrainingPackageDto mapToStudentTrainingPackageDto(StudentTrainingPackage studentTrainingPackage);
 
+    StudentTrainingPackageStatusDto mapToStudentTrainingPackageStatusDto(StudentTrainingPackageStatus studentTrainingPackageStatus);
+    List<TrainingPackageDto> mapToTrainingPackageDto(List<TrainingPackage> trainingPackage);
+
+    StudentTrainingPackageStatus mapToStudentTrainingPackageStatus(StudentTrainingPackageStatusDto status);
 }

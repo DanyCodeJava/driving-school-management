@@ -48,7 +48,7 @@ public class StudentRepositoryTest {
         trainingPackage = testEntityManager.find(TrainingPackage.class, trainingPackageId);
         var studentTrainingPackage = new StudentTrainingPackage();
         studentTrainingPackage.setTrainingPackage(trainingPackage);
-        studentTrainingPackage.setStatus(StatusTrainingPackage.COMPLETED); //todo student training package status enum
+        studentTrainingPackage.setStatus(StudentTrainingPackageStatus.COMPLETED);
         student.addStudentTrainingPackage(studentTrainingPackage);
         testEntityManager.flush();
         testEntityManager.clear();
@@ -59,7 +59,7 @@ public class StudentRepositoryTest {
                 .satisfies(stp->{
                     assertThat(stp.getStudent()).hasFieldOrPropertyWithValue("id", studentId);
                     assertThat(stp.getTrainingPackage()).hasFieldOrPropertyWithValue("id",trainingPackageId);
-                    assertThat(stp.getStatus()).isEqualTo(StatusTrainingPackage.COMPLETED);
+                    assertThat(stp.getStatus()).isEqualTo(StudentTrainingPackageStatus.COMPLETED);
                 });
         assertThat(trainingPackage.getStudentTrainingPackages()).hasSize(1);
         assertThat(student.getStudentTrainingPackages().get(0)).isSameAs(trainingPackage.getStudentTrainingPackages().get(0));

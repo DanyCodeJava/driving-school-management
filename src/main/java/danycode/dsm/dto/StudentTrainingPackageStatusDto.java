@@ -1,5 +1,5 @@
 package danycode.dsm.dto;
 
-public enum TrainingPackageStatusDto {
+public enum StudentTrainingPackageStatusDto {
     COMPLETED, INCOMPLETE
 }

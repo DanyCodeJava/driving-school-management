@@ -6,10 +6,10 @@ import danycode.dsm.dto.PhotoFileDto;
 import danycode.dsm.dto.StudentDto;
 import danycode.dsm.entity.Student;
 import danycode.dsm.mapper.StudentMapper;
-import danycode.dsm.mapper.StudentMapperImpl;
 import danycode.dsm.repository.StudentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -29,8 +29,9 @@ class StudentServiceImplTest {
     private StudentServiceImpl subject;
     @Mock
     private StudentRepository studentRepository;
+    @SuppressWarnings("WrongUsageOfMappersFactory")
     @Spy
-    private StudentMapper studentMapper = new StudentMapperImpl();
+    private StudentMapper studentMapper = Mappers.getMapper(StudentMapper.class);
     @Mock
     private  UserPhotoFileProcessor userPhotoFileProcessor;
     @Mock

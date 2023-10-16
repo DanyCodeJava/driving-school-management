@@ -3,11 +3,6 @@ package danycode.dsm.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
@@ -24,7 +19,7 @@ public class StudentTrainingPackage {
     private long id;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private StatusTrainingPackage status;
+    private StudentTrainingPackageStatus status;
     private String instructorName;
     @ManyToOne
     @JoinColumn(name = "student_id")

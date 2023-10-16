@@ -4,6 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" charset="utf-8"></script>
@@ -227,82 +230,23 @@
         </div>
       <div class="charts-card">
         <p class="chart-title main-title">TRAINING PACKAGE</p>
-        <div th:if="${student.lastTrainingPackage != null}" class="panel-body inf-content">
-          <div class="row">
-            <div class="col-md-12">
-              <strong class="text-center">Information</strong><br>
-              <div class="table-responsive">
-                <table class="table table-user-information">
-                  <tbody>
-                  <tr>
-                    <td>
-                      <strong>
-                        <span class="glyphicon glyphicon-road text-primary"></span>
-                       Car Type
-                      </strong>
-                    </td>
-                    <td class="text-primary">
-                      <span class="text-center" th:text="${student.lastTrainingPackage.carType}"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>
-                        <span class="glyphicon glyphicon-euro  text-primary"></span>
-                        Cost
-                      </strong>
-                    </td>
-                    <td class="text-primary">
-                      <span class="text-center" th:text="${student.lastTrainingPackage.cost}"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>
-                        <span class="glyphicon glyphicon-user text-primary"></span>
-                        Instructor name
-                      </strong>
-                    </td>
-                    <td class="text-primary">
-                      <span class="text-center" th:text="${student.lastTrainingPackage.instructorName}"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>
-                        <span class="glyphicon glyphicon-time text-primary"></span>
-                        Training duration
-                      </strong>
-                    </td>
-                    <td class="text-primary">
-                      <span class="text-center" th:text="${student.lastTrainingPackage.duration}"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>
-                        <span class="glyphicon glyphicon-stats text-primary"></span>
-                        Status
-                      </strong>
-                    </td>
-                    <td class="text-primary">
-                      <span class="text-center" th:text="${student.lastTrainingPackage.status}"></span>
-                    </td>
-                  </tbody>
-                </table>
+          <student-training-package-details-view  th:if="${student.lastTrainingPackage != null}"
+          th:attr="
+            student = ${student.id}, 
+            csrfValue=${_csrf.token}, 
+            csrfHeader=${_csrf.headerName},
+            carType=${student.lastTrainingPackage.carType},
+            instructorName=${student.lastTrainingPackage.instructorName},
+            cost=${student.lastTrainingPackage.cost},
+            duration=${student.lastTrainingPackage.duration},
+            studentTrainingPackageId=${student.lastTrainingPackage.id},
+            status=${student.lastTrainingPackage.status}">
+          </student-training-package-details-view>
 
-              </div>
-            </div>
-          </div>
-          <div class="text-center">
-          <a  th:href="@{'/student/trainingPackage/'+ ${student.id}}"  class="btn btn-primary text-center margin-button">Create Student Package</a>
-          </div>
-        </div>
-        <div th:if="${student.lastTrainingPackage == null}">
-          <student-training-package-creation-form th:attr="student = ${student.id} , csrfValue=${_csrf.token}, csrfHeader=${_csrf.headerName}">
-
+          <student-training-package-creation-form  th:if="${student.lastTrainingPackage == null}" 
+            th:attr="student = ${student.id} , csrfValue=${_csrf.token}, csrfHeader=${_csrf.headerName}">
           </student-training-package-creation-form>
-        </div>
+       
       </div>
 
 
@@ -414,9 +358,15 @@
 
 <!-- Scripts -->
 <script th:src="@{/js/dropDownMenu.js}"></script>
-<script type="module" th:if="${student.lastTrainingPackage==null}">
- import {StudentTrainingPackageCreationForm} from "[[@{/js/student-training-package-creation-form.js}]]";
- window.customElements.define('student-training-package-creation-form', StudentTrainingPackageCreationForm);
-</script>
+
+<script type="module">
+  import {StudentTrainingPackageCreationForm} from "[[@{/js/student-training-package-creation-form.js}]]";
+  import {StudentTrainingPackageDetailsView} from "[[@{/js/student-training-package-details-view.js}]]";
+  window.customElements.define('student-training-package-creation-form', StudentTrainingPackageCreationForm);
+  window.customElements.define('student-training-package-details-view', StudentTrainingPackageDetailsView);
+  document.body.addEventListener("student-training-package-created", ()=>window.location.reload());
+ </script>
+
+
 </body>
 </html>

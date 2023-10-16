@@ -1,5 +1,5 @@
 package danycode.dsm.entity;
 
-public enum StatusTrainingPackage {
+public enum StudentTrainingPackageStatus {
     COMPLETED, INCOMPLETE
 }
